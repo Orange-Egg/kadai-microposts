@@ -21,7 +21,10 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
+    
+    // これによって、showRegistrationForm アクションと
+    // register アクションをそのまま取り込んでいる
+    // (RegisterUsersはトレイト)
     use RegistersUsers;
 
     /**
