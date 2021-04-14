@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App; // 名前空間Appに保管
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,10 +46,92 @@ class User extends Authenticatable
     }
     
     /**
+     * このユーザがフォロー中のユーザ。（ Userモデルとの関係を定義）
+     */
+    public function followings()
+    {
+        // followings()の場合
+        // belongsToMany()の
+        // 第一引数: 得られるModelクラス（User::class)
+        // 第二引数: 中間テーブル（user_follow）
+        // 第三引数: 中間テーブルに保存されている自分のidを示すカラム名（user_id）
+        // 第四引数: 中間テーブルに保存されている関係先のidを示すカラム名（follow_id）
+        // withTimestamps(): 中間テーブルにもcreated_atとupdated_atを保存するためのメソッド。タイムスタンプを管理
+        return $this->belongsToMany(User::class, 'user_follow', 'user_id', 'follow_id')->withTimestamps();
+    }
+    
+    /**
+     * このユーザをフォロー中のユーザ。（ Userモデルとの関係を定義）
+     */
+    public function followers()
+    {
+        // followers()の場合、第三引数と第四引数が逆
+        return $this->belongsToMany(User::class, 'user_follow', 'follow_id', 'user_id')->withTimestamps();
+    }
+    
+    /**
+     * $userIdで指定されたユーザをフォローする。
+     *
+     * @param  int  $userId
+     * @return bool
+     */
+    public function follow($userId)
+    {
+        // すでにフォローしているかの確認
+        $exist = $this->is_following($userId);
+        // 対象が自分自身かどうかの確認
+        $its_me = $this->id == $userId;
+
+        if ($exist || $its_me) {
+            // すでにフォローしていれば何もしない
+            return false;
+        } else {
+            // 未フォローであればフォローする
+            $this->followings()->attach($userId);
+            return true;
+        }
+    }
+    
+    /**
+     * $userIdで指定されたユーザをアンフォローする。
+     *
+     * @param  int  $userId
+     * @return bool
+     */
+    public function unfollow($userId)
+    {
+        // すでにフォローしているかの確認
+        $exist = $this->is_following($userId);
+        // 対象が自分自身かどうかの確認
+        $its_me = $this->id == $userId;
+
+        if ($exist && !$its_me) {
+            // すでにフォローしていればフォローを外す
+            $this->followings()->detach($userId);
+            return true;
+        } else {
+            // 未フォローであれば何もしない
+            return false;
+        }
+    }
+    
+    /**
+     * 指定された $userIdのユーザをこのユーザがフォロー中であるか調べる。フォロー中ならtrueを返す。
+     *
+     * @param  int  $userId
+     * @return bool
+     */
+    public function is_following($userId)
+    {
+        // フォロー中ユーザの中に $userIdのものが存在するか
+        return $this->followings()->where('follow_id', $userId)->exists();
+    }
+    
+    /**
      * このユーザに関係するモデルの件数をロードする。
      */
     public function loadRelationshipCounts()
     {
-        $this->loadCount('microposts');
+        $this->loadCount(['microposts', 'followings', 'followers']);
     }
 }
