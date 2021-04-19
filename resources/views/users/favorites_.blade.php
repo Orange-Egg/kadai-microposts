@@ -1,4 +1,4 @@
-@if (count($microposts) > 0)
+@if (count($microposts) > 0) 
     <ul class="list-unstyled">
         @foreach ($microposts as $micropost)
             <li class="media mb-3">
@@ -15,22 +15,16 @@
                         <p class="mb-0">{!! nl2br(e($micropost->content)) !!}</p>
                     </div>
                     <div>
+                        {{-- idがユーザ登録されているかを判定 --}}
                         @if (Auth::id() == $micropost->user_id)
-                            {{-- 投稿削除ボタンのフォーム --}}
-                            {!! Form::open(['route' => ['microposts.destroy', $micropost->id], 'method' => 'delete']) !!}
-                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm']) !!}
-                            {!! Form::close() !!}
-                        {{-- @endif --}}
-                        @else
-                            {{-- お気に入り投稿のidか判定 --}}
-                            @if (Auth::user()->is_favorite($micropost->id))
-                            {{-- はずすボタンのフォーム --}}
-                                {!! Form::open(['route' => ['favorites.unfavorite', $micropost->id], 'method' => 'delete']) !!}
+                            {{-- お気に入り投稿削除ボタンのフォーム --}}
+                            @if (Auth::user()->is_favorite($user->id))
+                                {!! Form::open(['route' => ['micropost.unfavorite', $micropost->micropost_id], 'method' => 'delete']) !!}
                                 {!! Form::submit('Unfavorite', ['class' => "btn btn-danger btn-block"]) !!}
                                 {!! Form::close() !!}
-                            @else
-                                {{-- 加えるボタンのフォーム --}}
-                                {!! Form::open(['route' => ['favorites.favorite', $micropost->id]]) !!}
+                             @else
+                                {{-- お気に入り追加ボタンのフォーム --}}
+                                {!! Form::open(['route' => ['micropost.favorite', $micropost->micropost_id]]) !!}
                                 {!! Form::submit('Favorite', ['class' => "btn btn-primary btn-block"]) !!}
                                 {!! Form::close() !!}
                             @endif
@@ -41,5 +35,5 @@
         @endforeach
     </ul>
     {{-- ページネーションのリンク --}}
-    {{ $microposts->links() }}
+    {{ $favorites->links() }}
 @endif

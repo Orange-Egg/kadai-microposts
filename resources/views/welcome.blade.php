@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    {{-- 認証できればユーザの詳細ページを表示 --}}
     @if (Auth::check())
         <div class="row">
             <aside class="col-sm-4">
@@ -15,6 +16,7 @@
                 @include('microposts.microposts')
             </div>
         </div>
+    {{-- そうでなければユーザ登録ページへ遷移 --}}
     @else
         <div class="center jumbotron">
             <div class="text-center">

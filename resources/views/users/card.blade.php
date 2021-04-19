@@ -1,3 +1,4 @@
+{{-- 機能をまとめて部分テンプレート化 --}}
 {{-- ユーザ情報を表示 --}}
 <div class="card">
     <div class="card-header">

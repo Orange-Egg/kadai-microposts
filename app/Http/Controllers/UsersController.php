@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\User; // 追加
 
+// use App\Micropost; // 追加
+
 class UsersController extends Controller
 {
     public function index()
@@ -85,4 +87,29 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * ユーザが追加したお気に入りを一覧表示するアクション。
+     *
+     * @param  $micropost_id  投稿id
+     * @return \Illuminate\Http\Response
+     */
+    public function favorites($id)
+    {
+        $user=''; // 仮置き
+        
+        // idの値で投稿を検索して取得
+        $micropost = User::findOrFail($id);
+
+        // 関係するモデルの件数をロード
+        $micropost->loadRelationshipCounts();
+
+        // ユーザのお気に入り一覧を取得
+        $favorites = $micropost->favorites()->paginate(10);
+
+        // お気に入り一覧ビューでそれらを表示
+        return view('users.favorites', [
+            'user' => $user,
+            'microposts' => $favorites,
+        ]);
+    }
 }
