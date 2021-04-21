@@ -12,15 +12,8 @@
         <div class="col-sm-8">
             {{-- タブ --}}
             @include('users.navtabs')
-            {{-- ユーザ認証の判定 --}}
-            @if (Auth::id() == $user->id)
-                {{-- 投稿フォーム --}}
-                {{-- @include('microposts.form') --}}
-                {{-- お気に入り投稿一覧 --}}
-                @include('microposts.microposts')
-            @endif
-            
-            
+            {{-- お気に入り投稿一覧 --}}
+            @include('microposts.microposts')
         </div>
     </div>
 @endsection

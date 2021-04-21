@@ -1,7 +1,8 @@
+{{-- ログイン認証後一番最初に表示されるページ --}}
 @extends('layouts.app')
 
 @section('content')
-    {{-- 認証できればユーザの詳細ページを表示 --}}
+    {{-- 認証できていればユーザの詳細ページを表示 --}}
     @if (Auth::check())
         <div class="row">
             <aside class="col-sm-4">
@@ -10,6 +11,8 @@
                 @include('users.card')
             </aside>
             <div class="col-sm-8">
+                {{-- タブ --}}
+                @include('users.navtabs')
                 {{-- 投稿フォーム --}}
                 @include('microposts.form')
                 {{-- @include して投稿一覧を表示 --}}

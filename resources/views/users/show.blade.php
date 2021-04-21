@@ -10,8 +10,9 @@
         <div class="col-sm-8">
             {{-- タブ --}}
             @include('users.navtabs')
+            {{-- ユーザ認証パスしているか条件分岐 --}}
             @if (Auth::id() == $user->id)
-                {{-- 投稿フォーム --}}
+                {{-- パスしていたら、投稿フォーム表示 --}}
                 @include('microposts.form')
             @endif
             {{-- 投稿一覧 --}}

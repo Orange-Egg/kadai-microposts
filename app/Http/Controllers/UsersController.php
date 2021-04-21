@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\User; // 追加
 
-use App\Micropost; // 追加
+use App\Micropost; // 追加??(不要)
 
 class UsersController extends Controller
 {
