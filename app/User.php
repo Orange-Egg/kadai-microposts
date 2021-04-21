@@ -40,7 +40,7 @@ class User extends Authenticatable
     /**
      * このユーザが所有する投稿。（ Micropostモデルとの関係を定義）
      */
-    public function microposts()
+    public function microposts() //$user = App\User::find(1); // $user->microposts() // $tanaka = new Human('Tanaka'); // $tanaka->say()
     {
         return $this->hasMany(Micropost::class);
     }
@@ -70,6 +70,7 @@ class User extends Authenticatable
     }
     
     /**
+     * お気に入りの一覧を取得
      * このユーザがお気に入りに追加している投稿。（Micropostモデルとの関係を定義）
      */
     public function favorites()
@@ -144,7 +145,7 @@ class User extends Authenticatable
     }
     
     /**
-     * このユーザとフォロー中ユーザの投稿に絞り込む。
+     * このユーザとフォロー中ユーザの投稿に絞り込む。...timelineに表示
      */
     public function feed_microposts()
     {
@@ -171,7 +172,7 @@ class User extends Authenticatable
         $its_my_post = $this->id == $micropostId;
 
         if ($already_exist || $its_my_post) {
-            // すでにお気に入りに追加済みあるいは自分の投稿であれば何もしない
+            // すでにお気に入りに追加済み、あるいは自分の投稿であれば何もしない
             return false;
         } else {
             // まだお気に入りに入ってなければ追加する
@@ -216,7 +217,7 @@ class User extends Authenticatable
     }
     
     /**
-     * このユーザがお気に入りに加えている投稿に絞り込む。
+     * このユーザがお気に入りに加えている投稿に絞り込む？？
      */
     public function favorite_microposts()
     {
@@ -225,7 +226,8 @@ class User extends Authenticatable
         // このユーザのidもその配列に追加
         // $userIds[] = $this->id;
         // ユーザがお気に入りに加えている投稿に絞り込む
-        return Micropost::whereIn('micropost_id', $postIds);
+        // 'micropost_id'でなくid'
+        return Micropost::whereIn('id', $postIds);
     }
     
 }

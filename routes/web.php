@@ -15,6 +15,8 @@
 Route::get('/', 'MicropostsController@index');    // 上書き
 
 // ユーザ登録
+// ->name() はこのルーティングに名前をつけている
+// Viewのルーティングパス表記はこれと一致させなければならない
 Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('signup.get');
 Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
 
@@ -23,11 +25,11 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login')->name('login.post');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 
-// 認証付きのルーティング(authを使う)
+// 認証付きのルーティング(認証: authを使う)
 Route::group(['middleware' => ['auth']], function () {
     // フォロー/アンフォロー機能実装のために追加
     // prefix指定でURLの最初に/users/{id}/ が付与される
-    // ->name() はこのルーティングに名前をつけているだけ
+    // ->name() はこのルーティングに名前をつけている
     Route::group(['prefix' => 'users/{id}'], function () {
         Route::post('follow', 'UserFollowController@store')->name('user.follow');
         Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
